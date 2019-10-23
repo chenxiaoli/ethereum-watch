@@ -10,11 +10,11 @@ def get_web3_instance():
     if _web3 is not None:
         return _web3
     else:
-        if myconfig.configs.env == "prod":
-            my_provider = Web3.IPCProvider('/home/bill/eth-private-network/data2/geth.ipc')
+        if myconfig.configs.web3_provider.type == "ipc":
+            my_provider = Web3.IPCProvider(myconfig.configs.web3_provider.path)
+            _web3 = Web3(my_provider)
         else:
-            my_provider = Web3.IPCProvider('/home/bill/eth-private-network/data2/geth.ipc')
-        _web3 = Web3(my_provider)
+            raise Exception("请配置ipc priovider")
 
         logging.debug(".....start web3.....")
         return _web3

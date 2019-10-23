@@ -29,7 +29,8 @@ def new_block_process(block_number):
     db_services.insert_block(block)
     logging.debug("new block %s" % block.number)
     for transaction_hash in block.transactions:
-        transaction = w3.eth.getTransaction(transaction_hash)  # 遇性能问题,改异步把交易写入数据库,1.解析交易,发送到消息队列,2.保存transaction 到 数据库.
+        # 遇性能问题, 这里几个业务可以改成异步处理
+        transaction = w3.eth.getTransaction(transaction_hash)
         trades = block_utils.parse_transaction(transaction)
         rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trades))  # 发送交易通知到队列
         db_services.insert_transaction(transaction)
