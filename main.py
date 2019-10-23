@@ -50,6 +50,7 @@ def log_loop(event_filter, poll_interval):
 
 
 def run():
+    # 如果数据库的高度跟当前区块高度不一致,应该触发一个业务把丢失的区块处理了.
     latest_block_filter = w3.eth.filter('latest')
     log_loop(latest_block_filter, 2)
 
