@@ -2,15 +2,15 @@ configs = {
     'env': 'dev',
     'db': {
         'db_name': 'ethereum-watch',
-        'username': 'user',
-        'password': '123456',
-        'host': 'localhost',
+        'username': 'admin',
+        'password': '1025',
+        'host': '192.168.8.126',
         'port': 27017,
     },
     'rabbitmq_server': {
         'host': 'localhost',
         'user': 'user',
-        'password': '123456',
+        'password': '1318',
         "port": 5672
     },
     'queue': {

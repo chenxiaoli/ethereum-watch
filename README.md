@@ -7,7 +7,7 @@ virtualenv --python=/usr/bin/python3.6 ./venv
 安装依赖包
 pip install -r requirements.txt
 安装 rabbmitmq
-docker run -d --hostname eth-rabbit --name rabbit -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=123456 \
+sudo docker run -d --hostname eth-rabbit --name rabbit -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=1318 \
  -p 15671:15671 \
  -p 15672:15672 \
   -p 5671:5671 \
