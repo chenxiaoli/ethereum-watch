@@ -8,7 +8,7 @@ configs = {
         'port': 27017,
     },
     'rabbitmq_server': {
-        'host': 'localhost',
+        'host': '192.168.8.126',
         'user': 'user',
         'password': '1318',
         "port": 5672
@@ -18,7 +18,8 @@ configs = {
         "new_eth_trades_queue": "new_eth_trades_queue"  # 新交易
     },
     "web3_provider":{
-        "type":"ipc",
-        "path":'/home/bill/eth-private-network/data2/geth.ipc',
+        "type":"http",
+        "path":'http://192.168.8.126:8546',
+        #"path":"http://192.168.8.126:8545"
     }
 }

@@ -27,7 +27,7 @@ def _format_transaction(transaction):
     return _t
 
 
-def insert_transaction(transaction):
+def insert_transaction(transaction,transaction_receipt):
     w3 = web3_instance.get_web3_instance()
     block_number = transaction.get("blockNumber")
     logging.debug(type(transaction.get("hash")))
@@ -35,7 +35,7 @@ def insert_transaction(transaction):
     transaction_hash = w3.toHex(transaction.get("hash"))
     data = _format_transaction(transaction)
     db_o = Transaction(data=data, block_number=block_number,
-                       transaction_hash=transaction_hash)
+                       transaction_hash=transaction_hash,transaction_receipt=transaction_receipt)
     try:
         db_o.save()
     except NotUniqueError:

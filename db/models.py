@@ -20,6 +20,9 @@ class Transaction(Document):
     block_number = IntField()
     transaction_hash = StringField(unique=True)
     created_at = DateTimeField(default=datetime.datetime.utcnow)
+    transaction_receipt=DictField()
+
+
 
 
 class ExceptionTransaction(Document):
