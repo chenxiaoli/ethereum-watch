@@ -25,6 +25,7 @@ def send_new_eth_block_notification(eth_tx_jsonStr):
 def send_new_eth_trades_notification(trades_json):
     connection = get_rabbitmq_conn()
     channel = connection.channel()
+
     channel.queue_declare(queue=NEW_ETH_TRADES_QUEUE, durable=True)
 
     channel.basic_publish(exchange="",
@@ -39,7 +40,7 @@ def send_new_eth_trades_notification(trades_json):
 def get_rabbitmq_conn():
     global rabbitmq_conn
 
-    if rabbitmq_conn is not None:
+    if rabbitmq_conn is not None and not rabbitmq_conn.is_closed:
         return rabbitmq_conn
     else:
         credentials = pika.PlainCredentials(myconfig.configs.rabbitmq_server.user,
@@ -48,4 +49,5 @@ def get_rabbitmq_conn():
             host=myconfig.configs.rabbitmq_server.host, port=myconfig.configs.rabbitmq_server.port,
             credentials=credentials)
         )
+
         return rabbitmq_conn

@@ -43,6 +43,15 @@ def insert_transaction(transaction,transaction_receipt):
                              transaction_hash=transaction_hash).save()
 
 
+def get_latest_block_number():
+    last= Block.objects().order_by("-number").first()
+    if not last:
+        return 0
+    else:
+        return last.number
+
+
+
 def insert_block(block):
     number = block.get("number")
     try:
