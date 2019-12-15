@@ -3,7 +3,7 @@ import time
 from web3_config.web3_instance import get_web3_instance
 from utils import rabbitmq_instance
 import logging
-from db.models import Block
+
 from utils import block as block_utils
 from db import services as db_services
 import json
@@ -36,18 +36,19 @@ def block_process(block_number):
 
         db_services.insert_transaction(transaction,transaction_receipt)
         trades = block_utils.parse_transaction(transaction)
-        receipt_trades = block_utils.parse_transaction_receipt(transaction_receipt)
+        contract_trades = block_utils.parse_transaction_receipt(transaction_receipt)
         trades_count=len(trades)
         if transaction_status==1:
             if trades_count==1:
-                rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trades))  # 发送交易通知到队列
+                rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trades[0]))  # 发送交易通知到队列
+                db_services.save_trade(trades[0])  # 解析交易数据到数据库
             elif trades_count>1:
                 print("error trades")
 
-            for receipt_trade in receipt_trades:
-                rabbitmq_instance.send_new_eth_trades_notification(json.dumps(receipt_trade))  # 发送交易通知到队列
+            for trade in contract_trades:
+                rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trade))  # 发送交易通知到队列
 
-            db_services.transaction_to_account_detail(transaction)  # 解析交易数据到数据库
+                db_services.save_trade(trade)  # 解析交易数据到数据库
 
 def new_block_process(block_number):
     db_latest_block_number=db_services.get_latest_block_number()
