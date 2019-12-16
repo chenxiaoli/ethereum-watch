@@ -30,7 +30,7 @@ def get_web3_instance():
             _web3.middleware_onion.add(middleware.simple_cache_middleware)
 
         else:
-            raise Exception("请配置ipc priovider")
+            raise Exception("请配置priovider")
 
         logging.debug(".....start web3.....")
         return _web3
