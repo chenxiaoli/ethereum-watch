@@ -13,9 +13,11 @@ def send_new_eth_block_notification(eth_tx_jsonStr):
     eth_block_tx_channel = connection.channel()
 
     eth_block_tx_channel.exchange_declare(exchange=NEW_ETH_BLOCK_CHANNEL,
+
                              exchange_type='fanout')
 
     eth_block_tx_channel.basic_publish(exchange=NEW_ETH_BLOCK_CHANNEL,
+                                       routing_key="",
                                        body=eth_tx_jsonStr,
                                  )
     eth_block_tx_channel.close()
