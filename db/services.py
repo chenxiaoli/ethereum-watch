@@ -55,10 +55,11 @@ def get_latest_block_number():
 def insert_block(block):
     number = block.get("number")
     try:
-        Block(data=block, number=number).save()
+        _block=Block(data=block, number=number)
+        _block.save()
     except NotUniqueError:
         ExceptionBlock(number=number, data=block).save()
-    return
+
 
 
 def parse_transaction_to_account_detail(transaction):
