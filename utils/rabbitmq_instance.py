@@ -4,21 +4,20 @@ from config import configs as myconfig
 
 rabbitmq_conn = None
 
-NEW_ETH_BLOCK_CHANNEL = myconfig.configs.queue.new_eth_block_arrived
+NEW_ETH_BLOCK_CHANNEL = myconfig.configs.queue.new_eth_block_arrived_topic
 NEW_ETH_TRADES_QUEUE = myconfig.configs.queue.new_eth_trades_queue
 
 
 def send_new_eth_block_notification(eth_tx_jsonStr):
     connection = get_rabbitmq_conn()
     eth_block_tx_channel = connection.channel()
-    eth_block_tx_channel.queue_declare(queue=NEW_ETH_BLOCK_CHANNEL, durable=True)
 
-    eth_block_tx_channel.basic_publish(exchange="",
-                                       routing_key=NEW_ETH_BLOCK_CHANNEL,
+    eth_block_tx_channel.exchange_declare(exchange=NEW_ETH_BLOCK_CHANNEL,
+                             exchange_type='fanout')
+
+    eth_block_tx_channel.basic_publish(exchange=NEW_ETH_BLOCK_CHANNEL,
                                        body=eth_tx_jsonStr,
-                                       properties=pika.BasicProperties(
-                                           delivery_mode=2,  # make message persistent
-                                       ))
+                                 )
     eth_block_tx_channel.close()
 
 
