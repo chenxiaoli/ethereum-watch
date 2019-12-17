@@ -16,3 +16,6 @@ sudo docker run -d --hostname eth-rabbit --name rabbit -e RABBITMQ_DEFAULT_USER=
 rabbitmq:3-management
 
 http://192.168.8.126:15672
+
+
+
