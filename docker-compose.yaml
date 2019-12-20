@@ -1,0 +1,5 @@
+version: '2.0'
+services:
+  ethereum-watch:
+    container_name: 'ethereum-watch'
+    build: '.'
