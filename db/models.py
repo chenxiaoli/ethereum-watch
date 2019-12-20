@@ -85,6 +85,6 @@ class AccountDetail(Document):
     symbol = StringField()
     symbol_contract_address = StringField()
     block_number = IntField()
-    transaction_hash = StringField()
+    transaction_hash = StringField(unique=True)
     transaction_timestamp = LongField()
     created_at = DateTimeField(default=datetime.datetime.utcnow)

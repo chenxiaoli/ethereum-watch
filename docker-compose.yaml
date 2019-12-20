@@ -3,3 +3,6 @@ services:
   ethereum-watch:
     container_name: 'ethereum-watch'
     build: '.'
+
+    volumes:
+      - ../config.py:/usr/src/app/config/config_dev.py

@@ -163,3 +163,19 @@ def update_account_balance(account_detail, token=None):
         balance2 = get_eth_balance(account_detail.to_address)
         to_account.eth_balance = balance2
         to_account.save()
+
+
+def save_trade(trade):
+    # {"from": from_address, "to": to_address, "value": data, "contract_address": contract_address,
+    #  "block_number": block_number, "transaction_hash": transaction_hash})
+
+    account_detail=AccountDetail.objects(transaction_hash=trade["transaction_hash"]).first()
+    if not account_detail:
+        account_detail=AccountDetail()
+    account_detail.from_address=trade["from"]
+    account_detail.to_address = trade["to"]
+    account_detail.value = trade["value"]
+    account_detail.symbol_contract_address = trade["contract_address"]
+    account_detail.block_number = trade["block_number"]
+    account_detail.transaction_hash=trade["transaction_hash"]
+    account_detail.save()
