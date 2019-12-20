@@ -14,12 +14,12 @@ def send_new_eth_block_notification(eth_tx_jsonStr):
 
     eth_block_tx_channel.exchange_declare(exchange=NEW_ETH_BLOCK_CHANNEL,
 
-                             exchange_type='fanout')
+                                          exchange_type='fanout')
 
     eth_block_tx_channel.basic_publish(exchange=NEW_ETH_BLOCK_CHANNEL,
                                        routing_key="",
                                        body=eth_tx_jsonStr,
-                                 )
+                                       )
     eth_block_tx_channel.close()
 
 
@@ -48,9 +48,10 @@ def get_rabbitmq_conn():
                                             myconfig.configs.rabbitmq_server.password)
         rabbitmq_conn = pika.BlockingConnection(pika.ConnectionParameters(
             host=myconfig.configs.rabbitmq_server.host, port=myconfig.configs.rabbitmq_server.port,
-            credentials=credentials)
-            ,
-            heartbeat_interval=0
+            virtual_host=myconfig.configs.rabbitmq_server.virtual_host,
+            credentials=credentials
+        )
+
         )
 
         return rabbitmq_conn
