@@ -49,6 +49,8 @@ def get_rabbitmq_conn():
         rabbitmq_conn = pika.BlockingConnection(pika.ConnectionParameters(
             host=myconfig.configs.rabbitmq_server.host, port=myconfig.configs.rabbitmq_server.port,
             credentials=credentials)
+            ,
+            heartbeat_interval=0
         )
 
         return rabbitmq_conn
