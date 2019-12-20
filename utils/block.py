@@ -23,7 +23,6 @@ def parse_transaction(transaction):
         data = logs.get("data", 0)
         if contract_address and topics and data:
             from_address = topics[1]
-
             to_address = topics[2]
             data = Web3.toInt(logs.data)  # 这里可能会出现异常,溢出
             trades.append(
@@ -48,14 +47,12 @@ def parse_transaction_receipt(transaction_receipt):
             if contract_address and topics and data:
                 from_address = topics[1]
                 to_address = topics[2]
-                print("bytes:", len(from_address))
-
                 from_address=Web3.toHex(from_address[-20:])
                 to_address=Web3.toHex(to_address[-20:])
                 print("from:",from_address)
                 print("to:", to_address)
                 data = Web3.toInt(hexstr=log.data)  # 这里可能会出现异常,溢出
-                print("data:", type(transaction_hash))
+
                 trades.append(
                     {"from": from_address, "to": to_address, "value": data, "contract_address": contract_address,
                      "block_number": block_number, "transaction_hash": transaction_hash})

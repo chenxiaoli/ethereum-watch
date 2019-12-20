@@ -4,9 +4,9 @@ import datetime
 
 class Block(Document):
     data = DictField()
-    number = IntField(unique=True)
+    number = LongField(unique=True)
     created_at = DateTimeField(default=datetime.datetime.utcnow)
-    transaction_count = IntField()
+    transaction_count = LongField()
 
 
 class ExceptionBlock(Document):
@@ -84,7 +84,7 @@ class AccountDetail(Document):
     value = DecimalField()
     symbol = StringField()
     symbol_contract_address = StringField()
-    block_number = IntField()
+    block_number = LongField()
     transaction_hash = StringField(unique=True)
     transaction_timestamp = LongField()
     created_at = DateTimeField(default=datetime.datetime.utcnow)

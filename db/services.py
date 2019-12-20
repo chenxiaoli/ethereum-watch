@@ -1,4 +1,5 @@
 import logging
+from db.conn import db
 from mongoengine.errors import NotUniqueError
 from mongoengine.errors import DoesNotExist
 from web3_config import web3_instance
@@ -12,6 +13,8 @@ from .models import ExceptionBlock
 from .models import ExceptionTransaction
 from web3_config.web3_instance import get_web3_instance
 from utils import block as block_utils
+from bson.decimal128 import Decimal128
+
 
 
 def _format_transaction(transaction):
@@ -55,10 +58,11 @@ def get_latest_block_number():
 def insert_block(block):
     number = block.get("number")
     try:
-        _block=Block(data=block, number=number)
+        print(block)
+        _block=Block(data={}, number=number)
         _block.save()
     except NotUniqueError:
-        ExceptionBlock(number=number, data=block).save()
+        ExceptionBlock(number=number, data={}).save()
 
 
 
@@ -169,13 +173,13 @@ def save_trade(trade):
     # {"from": from_address, "to": to_address, "value": data, "contract_address": contract_address,
     #  "block_number": block_number, "transaction_hash": transaction_hash})
 
-    account_detail=AccountDetail.objects(transaction_hash=trade["transaction_hash"]).first()
-    if not account_detail:
-        account_detail=AccountDetail()
-    account_detail.from_address=trade["from"]
-    account_detail.to_address = trade["to"]
-    account_detail.value = trade["value"]
-    account_detail.symbol_contract_address = trade["contract_address"]
-    account_detail.block_number = trade["block_number"]
-    account_detail.transaction_hash=trade["transaction_hash"]
-    account_detail.save()
+    print("value",Decimal128(str(trade["value"])))
+    one={}
+    one.update({"transaction_hash":trade["transaction_hash"]})
+    one.update({"from_address":trade["from"]})
+    one.update({"to_address": trade["from"]})
+    one.update({"value": Decimal128(str(trade["value"]))})
+    one.update({"symbol_contract_address": trade.get("contract_address",None)})
+    one.update({"block_number": trade["block_number"]})
+
+    db.account_detail.insert_one(one)

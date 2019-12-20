@@ -9,9 +9,9 @@ configs = {
     },
     'rabbitmq_server': {
         'host': '192.168.8.126',
-        'virtual_host':"ehererum-watch",
+        'virtual_host':"/",
         'user': 'user',
-        'password': 'aBG1318',
+        'password': '1318',
         "port": 5672
     },
     'queue': {
@@ -20,7 +20,7 @@ configs = {
     },
     "web3_provider":{
         "type":"http",
-        "path":'http://192.168.8.126:8546',
-        #"path":"http://192.168.8.126:8545",
+        #"path":'http://192.168.8.126:8546',
+        "path":"http://192.168.8.126:8545",
     }
 }

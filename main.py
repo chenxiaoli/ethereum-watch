@@ -85,7 +85,7 @@ if __name__ == '__main__':
     setup_logger()
     block_number = w3.eth.blockNumber
     db_latest_block_number = db_services.get_latest_block_number()
-    if block_number > db_latest_block_number:
+    if block_number > db_latest_block_number and db_latest_block_number > 0:
         for pre_number in range(db_latest_block_number, block_number + 1):
             block_process(pre_number)
 

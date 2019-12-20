@@ -1,5 +1,4 @@
 celery==4.3
 pika==0.11.0
 web3==5.2.0
-pymongo
-mongoengine
+pymongo==3.10.0
