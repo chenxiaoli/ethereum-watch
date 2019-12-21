@@ -9,6 +9,8 @@ from db import services as db_services
 import json
 
 
+START_BLOCK=10000*100*9
+
 def setup_logger():
     # Prints logger info to terminal
     logger = logging.getLogger()
@@ -56,7 +58,7 @@ def block_process(block_number):
 
 def new_block_process(block_number):
     db_latest_block_number = db_services.get_latest_block_number()
-    if block_number > db_latest_block_number:
+    if block_number > db_latest_block_number and db_latest_block_number > START_BLOCK:
         for pre_number in range(db_latest_block_number, block_number + 1):
             block_process(pre_number)
     else:
@@ -86,7 +88,7 @@ if __name__ == '__main__':
     # setup_logger()
     block_number = w3.eth.blockNumber
     db_latest_block_number = db_services.get_latest_block_number()
-    if block_number > db_latest_block_number and db_latest_block_number > 0:
+    if block_number > db_latest_block_number and db_latest_block_number > START_BLOCK:
         for pre_number in range(db_latest_block_number, block_number + 1):
             block_process(pre_number)
 
