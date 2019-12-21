@@ -29,6 +29,7 @@ def block_process(block_number):
     block = w3.eth.getBlock(block_number)
     db_services.insert_block(block)
     rabbitmq_instance.send_new_eth_block_notification(json.dumps({"number": block_number}))
+    print("new block %s" % block.number)
     logging.debug("new block %s" % block.number)
     for transaction_hash in block.transactions:
         # 遇性能问题, 这里几个业务可以改成异步处理
@@ -82,7 +83,7 @@ class MyDaemon(Thread):
 
 
 if __name__ == '__main__':
-    setup_logger()
+    # setup_logger()
     block_number = w3.eth.blockNumber
     db_latest_block_number = db_services.get_latest_block_number()
     if block_number > db_latest_block_number and db_latest_block_number > 0:

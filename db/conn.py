@@ -8,6 +8,9 @@ uri = "mongodb://%s:%s@%s" % (
     "%s:%s" % (configs.db.host, configs.db.port))
 client = MongoClient(uri)
 db=client[configs.db.db_name]
+db.account_detail.create_index("transaction_hash", unique=True)
+db.exception_trade.create_index("transaction_hash", unique=True)
+
 connect(
     db=configs.db.db_name,
     username=configs.db.username,

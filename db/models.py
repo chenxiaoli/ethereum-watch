@@ -2,6 +2,7 @@ from mongoengine import *
 import datetime
 
 
+
 class Block(Document):
     data = DictField()
     number = LongField(unique=True)
@@ -82,6 +83,17 @@ class AccountDetail(Document):
     from_address = StringField()
     to_address = StringField()
     value = DecimalField()
+    symbol = StringField()
+    contract_address = StringField()
+    block_number = LongField()
+    transaction_hash = StringField(unique=True)
+    transaction_timestamp = LongField()
+    created_at = DateTimeField(default=datetime.datetime.utcnow)
+
+class ExceptionTrade(Document):
+    from_address = StringField()
+    to_address = StringField()
+    value = StringField()
     symbol = StringField()
     symbol_contract_address = StringField()
     block_number = LongField()

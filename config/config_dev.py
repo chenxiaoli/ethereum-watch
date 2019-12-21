@@ -8,10 +8,10 @@ configs = {
         'port': 27017,
     },
     'rabbitmq_server': {
-        'host': '192.168.8.126',
+        'host': '47.75.206.208',
         'virtual_host':"/",
         'user': 'user',
-        'password': '1318',
+        'password': '****',
         "port": 5672
     },
     'queue': {

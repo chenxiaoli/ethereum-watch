@@ -13,7 +13,10 @@ from .models import ExceptionBlock
 from .models import ExceptionTransaction
 from web3_config.web3_instance import get_web3_instance
 from utils import block as block_utils
-from bson.decimal128 import Decimal128
+from bson import decimal128
+from db.constants import MAX_TRADE_VALUE
+import pymongo
+import decimal
 
 
 
@@ -30,7 +33,7 @@ def _format_transaction(transaction):
     return _t
 
 
-def insert_transaction(transaction,transaction_receipt):
+def insert_transaction(transaction, transaction_receipt):
     w3 = web3_instance.get_web3_instance()
     block_number = transaction.get("blockNumber")
     logging.debug(type(transaction.get("hash")))
@@ -38,7 +41,7 @@ def insert_transaction(transaction,transaction_receipt):
     transaction_hash = w3.toHex(transaction.get("hash"))
     data = _format_transaction(transaction)
     db_o = Transaction(data=data, block_number=block_number,
-                       transaction_hash=transaction_hash,transaction_receipt=transaction_receipt)
+                       transaction_hash=transaction_hash, transaction_receipt=transaction_receipt)
     try:
         db_o.save()
     except NotUniqueError:
@@ -47,23 +50,20 @@ def insert_transaction(transaction,transaction_receipt):
 
 
 def get_latest_block_number():
-    last= Block.objects().order_by("-number").first()
+    last = Block.objects().order_by("-number").first()
     if not last:
         return 0
     else:
         return last.number
 
 
-
 def insert_block(block):
     number = block.get("number")
     try:
-        print(block)
-        _block=Block(data={}, number=number)
+        _block = Block(data={}, number=number)
         _block.save()
     except NotUniqueError:
         ExceptionBlock(number=number, data={}).save()
-
 
 
 def parse_transaction_to_account_detail(transaction):
@@ -173,13 +173,44 @@ def save_trade(trade):
     # {"from": from_address, "to": to_address, "value": data, "contract_address": contract_address,
     #  "block_number": block_number, "transaction_hash": transaction_hash})
 
-    print("value",Decimal128(str(trade["value"])))
-    one={}
-    one.update({"transaction_hash":trade["transaction_hash"]})
-    one.update({"from_address":trade["from"]})
-    one.update({"to_address": trade["from"]})
-    one.update({"value": Decimal128(str(trade["value"]))})
-    one.update({"symbol_contract_address": trade.get("contract_address",None)})
-    one.update({"block_number": trade["block_number"]})
+    # print("-----start save trade --------")
+    value=trade["value"]
+    if type(value)==int and  MAX_TRADE_VALUE<value:
+        one = {}
+        one.update({"value": str(trade["value"])})
+        one.update({"transaction_hash": trade["transaction_hash"]})
+        one.update({"from_address": trade["from"]})
+        one.update({"to_address": trade["from"]})
+        one.update({"contract_address": trade.get("contract_address", None)})
+        one.update({"block_number": trade["block_number"]})
+        try:
+            db.exception_trade.insert_one(one)
+        except pymongo.errors.DuplicateKeyError:
+            pass
+    # one = db.account_detail.find_one({"transaction_hash": trade["transaction_hash"]})
+    # print(one)
+    else:
+        one={}
+        one.update({"value": decimal128.Decimal128(str(trade["value"]))})
+        one.update({"transaction_hash": trade["transaction_hash"]})
+        one.update({"from_address": trade["from"]})
+        one.update({"to_address": trade["from"]})
+        one.update({"contract_address": trade.get("contract_address", None)})
+        one.update({"block_number": trade["block_number"]})
+        try:
+            db.account_detail.insert_one(one)
+        except pymongo.errors.DuplicateKeyError:
+            pass
 
-    db.account_detail.insert_one(one)
+    # account_detail = AccountDetail.objects(transaction_hash=trade["transaction_hash"]).first()
+    # if not account_detail:
+    #     account_detail = AccountDetail()
+    # account_detail.from_address = trade["from"]
+    # account_detail.to_address = trade["to"]
+    # account_detail.value = str(value)
+    # account_detail.symbol_contract_address = trade.get("contract_address", None)
+    # account_detail.block_number = trade["block_number"]
+    # account_detail.transaction_hash = trade["transaction_hash"]
+    # account_detail.save()
+
+    # print("-------------------end save trade ----------------------")
