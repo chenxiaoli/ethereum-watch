@@ -11,7 +11,7 @@ configs = {
         'host': '47.75.206.208',
         'virtual_host':"/",
         'user': 'user',
-        'password': '****',
+        'password': 'aBG1318',
         "port": 5672
     },
     'queue': {
