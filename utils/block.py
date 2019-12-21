@@ -7,12 +7,12 @@ def parse_transaction(transaction):
     trades = []
     from_address = transaction.get("from")
     to_address = transaction.get("to")
-    value = w3.fromWei(transaction["value"], 'ether')  # 这里注意溢出
+    value = transaction["value"] # 这里注意溢出
     block_number = transaction.get("blockNumber")
     transaction_hash = w3.toHex(transaction.get("hash"))
     if from_address and to_address and value:
         trades.append(
-            {"from": from_address, "to": to_address, "value": float(value), "symbol": "eth",
+            {"from": from_address, "to": to_address, "value": value, "symbol": "eth",
              "block_number": block_number,
              "transaction_hash": transaction_hash})
     logs = transaction.get("logs", None)

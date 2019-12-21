@@ -25,9 +25,6 @@ def block_process(block_number):
         db_services.insert_transaction(transaction, transaction_receipt)
         trades = block_utils.parse_transaction(transaction)
         contract_trades = block_utils.parse_transaction_receipt(transaction_receipt)
-
-        if w3.toHex(transaction_hash)=="0x02e43b8e20a1561e2f11880e6ad30efc1f406c9bc077e6f268cf402ce7711b02":
-            print(contract_trades)
         trades_count = len(trades)
         if transaction_status == 1:
             if trades_count == 1:
