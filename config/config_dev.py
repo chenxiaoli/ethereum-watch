@@ -1,7 +1,7 @@
 configs = {
     'env': 'dev',
     'db': {
-        'db_name': 'ethereum-watch-prod',
+        'db_name': 'ethereum-watch',
         'username': 'admin',
         'password': '1025',
         'host': '192.168.8.126',
