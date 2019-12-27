@@ -8,10 +8,10 @@ configs = {
         'port': 27017,
     },
     'rabbitmq_server': {
-        'host': '47.75.206.208',
+        'host': '192.168.8.126',
         'virtual_host':"/",
         'user': 'user',
-        'password': 'aBG1318',
+        'password': '1318',
         "port": 5672
     },
     'queue': {
@@ -20,8 +20,8 @@ configs = {
     },
     "web3_provider":{
         "type":"http",
-        #"path":'http://192.168.8.126:8546',
-        "path":"http://192.168.8.126:8545",
+        "path":'http://192.168.8.126:8546',
+        #"path":"http://192.168.8.126:8545",
     },
     "start_block_number":10000000
 }
