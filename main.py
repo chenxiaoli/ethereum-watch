@@ -9,7 +9,7 @@ from db import services as db_services
 import json
 from config import configs as myconfig
 
-START_BLOCK=myconfig.start_block_number
+START_BLOCK=myconfig.configs.start_block_number
 
 def setup_logger():
     # Prints logger info to terminal
