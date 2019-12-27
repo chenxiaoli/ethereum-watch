@@ -1,17 +1,17 @@
 configs = {
     'env': 'dev',
     'db': {
-        'db_name': 'ethereum-watch',
+        'db_name': 'ethereum-watch-prod',
         'username': 'admin',
         'password': '1025',
         'host': '192.168.8.126',
         'port': 27017,
     },
     'rabbitmq_server': {
-        'host': '192.168.8.126',
+        'host': '47.75.206.208',
         'virtual_host':"/",
         'user': 'user',
-        'password': '123456',
+        'password': 'aBG1318',
         "port": 5672
     },
     'queue': {
@@ -22,5 +22,6 @@ configs = {
         "type":"http",
         #"path":'http://192.168.8.126:8546',
         "path":"http://192.168.8.126:8545",
-    }
+    },
+    "start_block_number":10000000
 }

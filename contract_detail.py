@@ -18,9 +18,8 @@ if __name__ == '__main__':
     # w3.eth.defaultAccount = w3.eth.accounts[0]
     # w3.geth.personal.unlockAccount(w3.eth.defaultAccount, "123")
 
-    contract_address = "0xe7b8943b4b901a8f27d60b6f613647656ece9a50"
+    contract_address = "0x3382a696e01d6776a7585b08ac38071c2f1d2ccf"
     contract_address = Web3.toChecksumAddress(contract_address)
     contract = w3.eth.contract(address=contract_address, abi=abi.tfor_abi)
-    value=1*10**6
     print(contract.all_functions())
     print(contract.functions.decimals().call())
