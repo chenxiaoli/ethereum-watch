@@ -23,5 +23,5 @@ configs = {
         "path":'http://192.168.8.126:8546',
         #"path":"http://192.168.8.126:8545",
     },
-    "start_block_number":10000000
+    "start_block_number":10000
 }
