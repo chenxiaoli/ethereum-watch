@@ -7,9 +7,9 @@ import logging
 from utils import block as block_utils
 from db import services as db_services
 import json
+from config import configs as myconfig
 
-
-START_BLOCK=10000*100*9
+START_BLOCK=myconfig.start_block_number
 
 def setup_logger():
     # Prints logger info to terminal
