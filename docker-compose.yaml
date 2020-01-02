@@ -1,8 +1,12 @@
 version: '2.0'
 services:
-  ethereum-watch:
-    container_name: 'ethereum-watch'
-    build: '.'
-
-    volumes:
-      - ../config.py:/usr/src/app/config/config_dev.py
+  block-number-producer:
+    image: 'ethereum-watch'
+    entrypoint:
+      - python
+      - ./block_number_producer.py
+  block-process-worker:
+    image: 'ethereum-watch'
+    entrypoint:
+      - python
+      - ./block_process_worker.py

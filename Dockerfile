@@ -5,7 +5,7 @@ COPY . /usr/src/app
 
 RUN pip install  -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
 
-CMD ["python", "./main.py"]
+CMD ["python", "./block_number_producer.py"]
 
 
 
