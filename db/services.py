@@ -63,7 +63,14 @@ def insert_block(block):
         _block = Block(data={}, number=number)
         _block.save()
     except NotUniqueError:
-        ExceptionBlock(number=number, data={}).save()
+        pass
+
+def update_block(block):
+    number = block.get("number")
+    _block=Block.objects(number=number).first()
+    if _block:
+        _block.read_done="YES"
+        _block.save()
 
 
 def parse_transaction_to_account_detail(transaction):

@@ -8,6 +8,7 @@ class Block(Document):
     number = LongField(unique=True)
     created_at = DateTimeField(default=datetime.datetime.utcnow)
     transaction_count = LongField()
+    read_done=StringField()
 
 
 class ExceptionBlock(Document):

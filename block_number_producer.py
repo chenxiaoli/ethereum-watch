@@ -28,14 +28,21 @@ w3 = get_web3_instance()
 
 def new_block_process(block_number):
     db_latest_block_number = db_services.get_latest_block_number()
+    print("block_number-db_latest_block_number=",block_number-db_latest_block_number)
     if block_number > db_latest_block_number and db_latest_block_number > START_BLOCK:
-        for pre_number in range(db_latest_block_number, block_number + 1):
-            rabbitmq_instance.send_eth_block_number(pre_number)
+        for pre_number in range(db_latest_block_number, block_number+1):
+            rabbitmq_instance.send_eth_block_number(str(pre_number))
+            print("sent block number:",pre_number)
+            db_services.insert_block({"number":pre_number})
+    rabbitmq_instance.send_eth_block_number(str(block_number))
+    db_services.insert_block({"number": block_number})
+    print("sent block number:", block_number)
 
 
 def handle_event(event):
     block_number = w3.eth.blockNumber
     new_block_process(block_number)
+
 
 
 def log_loop(event_filter, poll_interval):
@@ -62,3 +69,5 @@ if __name__ == '__main__':
             t.deamon = True
             t.start()
         time.sleep(10)
+
+
