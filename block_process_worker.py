@@ -9,7 +9,6 @@ from db import services as db_services
 import json
 w3 = get_web3_instance()
 
-
 def block_process(block_number):
 
     block = w3.eth.getBlock(block_number)
