@@ -34,7 +34,7 @@ def block_process(block_number):
                 db_services.save_trade(trades[0])  # 解析交易数据到数据库
             elif trades_count > 1:
                 print("error trades")
-                
+
             for trade in contract_trades:
                 rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trade))  # 发送交易通知到队列
 
