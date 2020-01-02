@@ -62,8 +62,9 @@ def insert_block(block):
     try:
         _block = Block(data={}, number=number)
         _block.save()
+        return True
     except NotUniqueError:
-        pass
+        return False
 
 def update_block(block):
     number = block.get("number")
