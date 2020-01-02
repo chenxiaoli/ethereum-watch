@@ -1,4 +1,3 @@
-from config import configs as myconfig
 from web3_config.web3_instance import get_web3_instance
 from utils import rabbitmq_instance
 import logging

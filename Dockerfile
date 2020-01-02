@@ -3,7 +3,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY . /usr/src/app
 
-RUN pip install  -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
+RUN pip install  -r requirements.txt
 
 CMD ["python", "./block_number_producer.py"]
 
