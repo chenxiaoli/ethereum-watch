@@ -3,7 +3,7 @@ import datetime
 
 
 
-class Block(Document):
+class Block(DynamicDocument):
     data = DictField()
     number = LongField(unique=True)
     created_at = DateTimeField(default=datetime.datetime.utcnow)
