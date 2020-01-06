@@ -18,26 +18,8 @@ def block_process(block_number):
     #print("new block %s" % block.number)
     logging.debug("new block %s" % block.number)
     for transaction_hash in block.transactions:
-        # 遇性能问题, 这里几个业务可以改成异步处理
-        transaction = w3.eth.getTransaction(transaction_hash)
-        transaction_receipt = w3.eth.getTransactionReceipt(transaction_hash)
-        transaction_status = transaction_receipt.get("status")
-
-        # db_services.insert_transaction(transaction, transaction_receipt)
-        trades = block_utils.parse_transaction(transaction)
-        contract_trades = block_utils.parse_transaction_receipt(transaction_receipt)
-        trades_count = len(trades)
-        if transaction_status == 1:
-            if trades_count == 1:
-                rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trades[0]))  # 发送交易通知到队列
-                db_services.save_trade(trades[0])  # 解析交易数据到数据库
-            elif trades_count > 1:
-                print("error trades")
-
-            for trade in contract_trades:
-                rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trade))  # 发送交易通知到队列
-
-                db_services.save_trade(trade)  # 解析交易数据到数据库
+        transaction_hash = w3.toHex(transaction_hash)
+        rabbitmq_instance.send_eth_transaction_notification(transaction_hash)
 
 
 def on_message(channel, method_frame, header_frame, body):

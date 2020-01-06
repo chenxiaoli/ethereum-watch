@@ -14,3 +14,12 @@ services:
     deploy:
       replicas: 3
     restart:  always
+
+  transaction-process-worker:
+    image: 'ethereum-watch'
+    entrypoint:
+      - python
+      - ./transaction_process_worker.py
+    deploy:
+      replicas: 3
+    restart:  always

@@ -7,6 +7,22 @@ rabbitmq_conn = None
 NEW_ETH_BLOCK_CHANNEL = myconfig.configs.queue.new_eth_block_arrived_topic
 NEW_ETH_TRADES_QUEUE = myconfig.configs.queue.new_eth_trades_queue
 ETH_BLOCK_NUMBER_QUEUE = myconfig.configs.queue.eth_block_number_queue
+ETH_TRANSACTION_QUEUE = myconfig.configs.queue.eth_transaction_queue
+
+
+def send_eth_transaction_notification(transaction_hash):
+    connection = get_rabbitmq_conn()
+    channel = connection.channel()
+
+    channel.queue_declare(queue=ETH_TRANSACTION_QUEUE, durable=True)
+
+    channel.basic_publish(exchange="",
+                          routing_key=ETH_TRANSACTION_QUEUE,
+                          body=transaction_hash,
+                          properties=pika.BasicProperties(
+                              delivery_mode=2,  # make message persistent
+                          ))
+    channel.close()
 
 
 def send_new_eth_block_notification(eth_tx_jsonStr):
@@ -37,7 +53,6 @@ def send_eth_block_number(block_number):
                               delivery_mode=2,  # make message persistent
                           ))
     channel.close()
-
 
 
 def send_new_eth_trades_notification(trades_json):

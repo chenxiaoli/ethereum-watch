@@ -17,6 +17,7 @@ configs = {
     'queue': {
         "new_eth_block_arrived_topic": "new_eth_block_arrived_topic",  # 新区块产生
         "eth_block_number_queue": "eth_block_number_queue",  # 区块信息解析
+        "eth_transaction_queue":"eth_transaction_queue",  # 事务解析解析
         "new_eth_trades_queue": "new_eth_trades_queue"  # 新交易
     },
     "web3_provider":{
