@@ -1,4 +1,5 @@
 from web3.exceptions import TransactionNotFound
+from web3 import Web3
 from web3_config.web3_instance import get_web3_instance
 from utils import rabbitmq_instance
 import logging
@@ -23,7 +24,7 @@ def transaction_process(transaction_hash):
     except TransactionNotFound:
         return
 
-    transaction_receipt = w3.eth.getTransactionReceipt(transaction_hash)
+    transaction_receipt = w3.eth.getTransactionReceipt(Web3.toBytes(hexstr=transaction_hash))
     transaction_status = transaction_receipt.get("status")
 
     # db_services.insert_transaction(transaction, transaction_receipt)
