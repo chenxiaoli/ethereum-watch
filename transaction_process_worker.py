@@ -18,13 +18,16 @@ def transaction_process(transaction_hash):
     #print("new block %s" % block.number)
     logging.debug("transaction hash %s" % transaction_hash)
 
+    transaction_hash=transaction_hash.decode("utf8")
+    # print(type(transaction_hash),transaction_hash)
     # 遇性能问题, 这里几个业务可以改成异步处理
     try:
         transaction = w3.eth.getTransaction(transaction_hash)
     except TransactionNotFound:
+        logging.error("TransactionNotFound:%s" % transaction_hash)
         return
 
-    transaction_receipt = w3.eth.getTransactionReceipt(Web3.toBytes(hexstr=transaction_hash))
+    transaction_receipt = w3.eth.getTransactionReceipt(transaction_hash)
     transaction_status = transaction_receipt.get("status")
 
     # db_services.insert_transaction(transaction, transaction_receipt)
@@ -45,7 +48,7 @@ def transaction_process(transaction_hash):
 
 
 def on_message(channel, method_frame, header_frame, body):
-    transaction_process(str(body))
+    transaction_process(body)
     channel.basic_ack(delivery_tag=method_frame.delivery_tag)
 
 
