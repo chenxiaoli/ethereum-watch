@@ -12,7 +12,7 @@ services:
       - python
       - ./block_process_worker.py
     deploy:
-      replicas: 3
+      replicas: 1
     restart:  always
 
   transaction-process-worker:
