@@ -1,24 +1,22 @@
 from web3.exceptions import TransactionNotFound
-from web3 import Web3
 from web3_config.web3_instance import get_web3_instance
 from utils import rabbitmq_instance
 import logging
 import pika
 
 from utils import block as block_utils
-from db import services as db_services
+
 import json
 from config import configs as myconfig
 
-
 w3 = get_web3_instance()
 
-def transaction_process(transaction_hash):
 
-    #print("new block %s" % block.number)
+def transaction_process(transaction_hash):
+    # print("new block %s" % block.number)
     logging.debug("transaction hash %s" % transaction_hash)
 
-    transaction_hash=transaction_hash.decode("utf8")
+    transaction_hash = transaction_hash.decode("utf8")
     # print(type(transaction_hash),transaction_hash)
     # 遇性能问题, 这里几个业务可以改成异步处理
     try:
@@ -35,13 +33,9 @@ def transaction_process(transaction_hash):
     contract_trades = block_utils.parse_transaction_receipt(transaction_receipt)
 
     if transaction_status == 1:
-        rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trades[0]))  # 发送交易通知到队列
-        # db_services.save_trade(trades[0])  # 解析交易数据到数据库
-
+        rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trades))  # 发送交易通知到队列
         for trade in contract_trades:
             rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trade))  # 发送交易通知到队列
-
-            # db_services.save_trade(trade)  # 解析交易数据到数据库
 
 
 def on_message(channel, method_frame, header_frame, body):
@@ -54,7 +48,7 @@ if __name__ == '__main__':
     password = myconfig.configs.rabbitmq_server.password
     host = myconfig.configs.rabbitmq_server.host
     port = myconfig.configs.rabbitmq_server.port
-    eth_transaction_queue=myconfig.configs.queue.eth_transaction_queue
+    eth_transaction_queue = myconfig.configs.queue.eth_transaction_queue
 
     credentials = pika.PlainCredentials(user, password)
     connection = pika.BlockingConnection(pika.ConnectionParameters(
@@ -65,4 +59,3 @@ if __name__ == '__main__':
     channel.basic_qos(prefetch_count=1)
     channel.basic_consume(on_message, eth_transaction_queue)
     channel.start_consuming()
-
