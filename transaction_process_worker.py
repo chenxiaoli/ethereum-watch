@@ -1,3 +1,4 @@
+from web3.exceptions import TransactionNotFound
 from web3_config.web3_instance import get_web3_instance
 from utils import rabbitmq_instance
 import logging
@@ -8,6 +9,7 @@ from db import services as db_services
 import json
 from config import configs as myconfig
 
+
 w3 = get_web3_instance()
 
 def transaction_process(transaction_hash):
@@ -16,7 +18,11 @@ def transaction_process(transaction_hash):
     logging.debug("transaction hash %s" % transaction_hash)
 
     # 遇性能问题, 这里几个业务可以改成异步处理
-    transaction = w3.eth.getTransaction(str(transaction_hash))
+    try:
+        transaction = w3.eth.getTransaction(transaction_hash)
+    except TransactionNotFound:
+        return
+
     transaction_receipt = w3.eth.getTransactionReceipt(transaction_hash)
     transaction_status = transaction_receipt.get("status")
 
@@ -38,7 +44,7 @@ def transaction_process(transaction_hash):
 
 
 def on_message(channel, method_frame, header_frame, body):
-    transaction_process(body)
+    transaction_process(str(body))
     channel.basic_ack(delivery_tag=method_frame.delivery_tag)
 
 
