@@ -33,18 +33,15 @@ def transaction_process(transaction_hash):
     # db_services.insert_transaction(transaction, transaction_receipt)
     trades = block_utils.parse_transaction(transaction)
     contract_trades = block_utils.parse_transaction_receipt(transaction_receipt)
-    trades_count = len(trades)
+
     if transaction_status == 1:
-        if trades_count == 1:
-            rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trades[0]))  # 发送交易通知到队列
-            db_services.save_trade(trades[0])  # 解析交易数据到数据库
-        elif trades_count > 1:
-            print("error trades")
+        rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trades[0]))  # 发送交易通知到队列
+        # db_services.save_trade(trades[0])  # 解析交易数据到数据库
 
         for trade in contract_trades:
             rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trade))  # 发送交易通知到队列
 
-            db_services.save_trade(trade)  # 解析交易数据到数据库
+            # db_services.save_trade(trade)  # 解析交易数据到数据库
 
 
 def on_message(channel, method_frame, header_frame, body):

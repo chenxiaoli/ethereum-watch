@@ -87,7 +87,7 @@ class AccountDetail(Document):
     symbol = StringField()
     contract_address = StringField()
     block_number = LongField()
-    transaction_hash = StringField(unique=True)
+    transaction_hash = StringField()
     transaction_timestamp = LongField()
     created_at = DateTimeField(default=datetime.datetime.utcnow)
 
@@ -98,6 +98,6 @@ class ExceptionTrade(Document):
     symbol = StringField()
     symbol_contract_address = StringField()
     block_number = LongField()
-    transaction_hash = StringField(unique=True)
+    transaction_hash = StringField()
     transaction_timestamp = LongField()
     created_at = DateTimeField(default=datetime.datetime.utcnow)
