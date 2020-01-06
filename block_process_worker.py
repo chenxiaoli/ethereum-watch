@@ -58,6 +58,7 @@ if __name__ == '__main__':
     )
     channel = connection.channel()
     channel.queue_declare(queue=eth_block_number_queue, durable=True)
+    channel.basic_qos(prefetch_count=1)
     channel.basic_consume(on_message, eth_block_number_queue)
     channel.start_consuming()
 
