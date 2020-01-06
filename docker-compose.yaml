@@ -1,12 +1,16 @@
-version: '2.0'
+version: '3.0'
 services:
   block-number-producer:
     image: 'ethereum-watch'
     entrypoint:
       - python
       - ./block_number_producer.py
+    restart:  always
   block-process-worker:
     image: 'ethereum-watch'
     entrypoint:
       - python
       - ./block_process_worker.py
+    deploy:
+      replicas: 3
+    restart:  always

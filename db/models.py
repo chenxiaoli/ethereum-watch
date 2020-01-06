@@ -11,13 +11,13 @@ class Block(DynamicDocument):
     read_done=StringField()
 
 
-class ExceptionBlock(Document):
+class ExceptionBlock(DynamicDocument):
     data = DictField()
     number = IntField()
     created_at = DateTimeField(default=datetime.datetime.utcnow)
 
 
-class Transaction(Document):
+class Transaction(DynamicDocument):
     data = DictField()
     block_number = IntField()
     transaction_hash = StringField(unique=True)
@@ -27,14 +27,14 @@ class Transaction(Document):
 
 
 
-class ExceptionTransaction(Document):
+class ExceptionTransaction(DynamicDocument):
     data = DictField()
     block_number = IntField()
     transaction_hash = StringField()
     created_at = DateTimeField(default=datetime.datetime.utcnow)
 
 
-class Account(Document):
+class Account(DynamicDocument):
     """
     以太坊网络上已经发布了几万种token,把token 列表存放在这里?
     """
@@ -51,7 +51,7 @@ class Account(Document):
             db_balance.save()
 
 
-class Token(Document):
+class Token(DynamicDocument):
     """
     以太坊 token
     """
