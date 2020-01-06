@@ -36,8 +36,6 @@ def _format_transaction(transaction):
 def insert_transaction(transaction, transaction_receipt):
     w3 = web3_instance.get_web3_instance()
     block_number = transaction.get("blockNumber")
-    logging.debug(type(transaction.get("hash")))
-    logging.debug(transaction.get("hash"))
     transaction_hash = w3.toHex(transaction.get("hash"))
     data = _format_transaction(transaction)
     db_o = Transaction(data=data, block_number=block_number,

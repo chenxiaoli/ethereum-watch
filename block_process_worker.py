@@ -23,7 +23,7 @@ def block_process(block_number):
         transaction_receipt = w3.eth.getTransactionReceipt(transaction_hash)
         transaction_status = transaction_receipt.get("status")
 
-        db_services.insert_transaction(transaction, transaction_receipt)
+        # db_services.insert_transaction(transaction, transaction_receipt)
         trades = block_utils.parse_transaction(transaction)
         contract_trades = block_utils.parse_transaction_receipt(transaction_receipt)
         trades_count = len(trades)
