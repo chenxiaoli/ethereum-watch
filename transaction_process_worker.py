@@ -16,7 +16,7 @@ def transaction_process(transaction_hash):
     logging.debug("transaction hash %s" % transaction_hash)
 
     # 遇性能问题, 这里几个业务可以改成异步处理
-    transaction = w3.eth.getTransaction(transaction_hash)
+    transaction = w3.eth.getTransaction(str(transaction_hash))
     transaction_receipt = w3.eth.getTransactionReceipt(transaction_hash)
     transaction_status = transaction_receipt.get("status")
 
