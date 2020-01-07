@@ -21,3 +21,4 @@ http://192.168.8.126:15672
 sudo docker build --tag=ethereum-watch .
 
 docker stack deploy -c docker-compose.yaml ethereum-watch
+docker stack deploy -c docker-compose.yaml ethereum-watch-prod
