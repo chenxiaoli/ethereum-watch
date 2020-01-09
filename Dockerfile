@@ -6,7 +6,3 @@ COPY . /usr/src/app
 RUN pip install  -r requirements.txt
 
 CMD ["python", "./block_number_producer.py"]
-
-
-
-

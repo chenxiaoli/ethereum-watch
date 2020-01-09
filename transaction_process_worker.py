@@ -25,7 +25,12 @@ def transaction_process(transaction_hash):
         logging.error("TransactionNotFound:%s" % transaction_hash)
         return
 
-    transaction_receipt = w3.eth.getTransactionReceipt(transaction_hash)
+    try:
+        transaction_receipt = w3.eth.getTransactionReceipt(transaction_hash)
+    except TransactionNotFound:
+        logging.error("TransactionNotFound:%s" % transaction_hash)
+        return
+
     transaction_status = transaction_receipt.get("status")
 
     # db_services.insert_transaction(transaction, transaction_receipt)
