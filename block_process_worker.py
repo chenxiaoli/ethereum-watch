@@ -33,11 +33,11 @@ if __name__ == '__main__':
     host = myconfig.configs.rabbitmq_server.host
     port = myconfig.configs.rabbitmq_server.port
     eth_block_number_queue=myconfig.configs.queue.eth_block_number_queue
-    vhost=myconfig.configs.rabbitmq_server.virtual_host
+    virtual_host=myconfig.configs.rabbitmq_server.virtual_host
 
     credentials = pika.PlainCredentials(user, password)
     connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host=host, port=port,vhost=vhost, credentials=credentials)
+        host=host, port=port,virtual_host=virtual_host, credentials=credentials)
     )
     channel = connection.channel()
     channel.queue_declare(queue=eth_block_number_queue, durable=True)
