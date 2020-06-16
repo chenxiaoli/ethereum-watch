@@ -1,5 +1,4 @@
 from config import configs as myconfig
-from web3 import Web3
 from web3 import Web3, middleware
 from web3.gas_strategies.time_based import medium_gas_price_strategy
 

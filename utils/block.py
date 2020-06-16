@@ -12,7 +12,7 @@ def parse_transaction(transaction):
     transaction_hash = w3.toHex(transaction.get("hash"))
     if from_address and to_address and value > 0:
         trades.append(
-            {"from": from_address, "to": to_address, "value": value, "symbol": "eth",
+            {"from": from_address, "to": to_address, "value": str(value), "symbol": "eth",
              "block_number": block_number,
              "transaction_hash": transaction_hash})
     logs = transaction.get("logs", None)
@@ -22,12 +22,12 @@ def parse_transaction(transaction):
         topics = logs.get("topics", None)
         data = logs.get("data", 0)
         if contract_address and topics and data:
-            from_address = str(topics[1]).lower()
-            to_address = str(topics[2]).lower()
+            from_address = topics[1]
+            to_address = topics[2]
             data = Web3.toInt(logs.data)  # 这里可能会出现异常,溢出
             if data > 0:
                 trades.append(
-                    {"from": from_address, "to": to_address, "value": data,
+                    {"from": from_address, "to": to_address, "value": logs.data,
                      "contract_address": str(contract_address).lower(),
                      "block_number": block_number, "transaction_hash": transaction_hash})
     return trades
@@ -52,13 +52,12 @@ def parse_transaction_receipt(transaction_receipt):
             to_address = topics[2]
             from_address = Web3.toHex(from_address[-20:])
             to_address = Web3.toHex(to_address[-20:])
-
             try:
                 data = Web3.toInt(hexstr=log.data)  # 这里可能会出现异常,溢出
                 if data>0:
                     trades.append(
-                        {"from": str(from_address).lower(), "to": str(to_address).lower(), "value": data,
-                         "contract_address": str(contract_address).lower(),
+                        {"from": from_address, "to": to_address, "value": str(data),
+                         "contract_address": contract_address,
                          "block_number": block_number, "transaction_hash": transaction_hash})
             except ValueError:
                 pass
