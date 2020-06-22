@@ -1,4 +1,3 @@
-import logging
 from db.conn import db
 from mongoengine.errors import NotUniqueError
 from mongoengine.errors import DoesNotExist
@@ -9,15 +8,13 @@ from .models import Block
 from .models import AccountDetail
 from .models import Account
 from .models import Token
-from .models import ExceptionBlock
 from .models import ExceptionTransaction
 from web3_config.web3_instance import get_web3_instance
 from utils import block as block_utils
 from bson import decimal128
 from db.constants import MAX_TRADE_VALUE
+from contract.erc20 import Erc20
 import pymongo
-import decimal
-
 
 
 def _format_transaction(transaction):
@@ -64,11 +61,12 @@ def insert_block(block):
     except NotUniqueError:
         return False
 
+
 def update_block(block):
     number = block.get("number")
-    _block=Block.objects(number=number).first()
+    _block = Block.objects(number=number).first()
     if _block:
-        _block.read_done="YES"
+        _block.read_done = "YES"
         _block.save()
 
 
@@ -180,8 +178,8 @@ def save_trade(trade):
     #  "block_number": block_number, "transaction_hash": transaction_hash})
 
     # print("-----start save trade --------")
-    value=trade["value"]
-    if type(value)==int and  MAX_TRADE_VALUE<value:
+    value = trade["value"]
+    if type(value) == int and MAX_TRADE_VALUE < value:
         one = {}
         one.update({"value": str(trade["value"])})
         one.update({"transaction_hash": trade["transaction_hash"]})
@@ -196,7 +194,7 @@ def save_trade(trade):
     # one = db.account_detail.find_one({"transaction_hash": trade["transaction_hash"]})
     # print(one)
     else:
-        one={}
+        one = {}
         one.update({"value": decimal128.Decimal128(str(trade["value"]))})
         one.update({"transaction_hash": trade["transaction_hash"]})
         one.update({"from_address": trade["from"]})
@@ -208,15 +206,22 @@ def save_trade(trade):
         except pymongo.errors.DuplicateKeyError:
             pass
 
-    # account_detail = AccountDetail.objects(transaction_hash=trade["transaction_hash"]).first()
-    # if not account_detail:
-    #     account_detail = AccountDetail()
-    # account_detail.from_address = trade["from"]
-    # account_detail.to_address = trade["to"]
-    # account_detail.value = str(value)
-    # account_detail.symbol_contract_address = trade.get("contract_address", None)
-    # account_detail.block_number = trade["block_number"]
-    # account_detail.transaction_hash = trade["transaction_hash"]
-    # account_detail.save()
 
-    # print("-------------------end save trade ----------------------")
+def get_contract_info(address):
+    token = Token.objects(contract_address=address).first()
+    if token:
+        return token
+    erc20 = Erc20(address=address)
+    contract_info = erc20.contract_info()
+    name = contract_info.get("name")
+    symbol = contract_info.get("symbol")
+    decimals = contract_info.get("decimals")
+    total_supply = contract_info.get("totalSupply")
+    token = Token(name=name, symbol=symbol, decimals=decimals, total_supply=total_supply)
+    if token.name and symbol and decimals > -1:
+        try:
+            db.token.insert_one(token)
+        except pymongo.errors.DuplicateKeyError:
+            pass
+        return token
+    return None
