@@ -20,12 +20,16 @@ class Erc20(object):
         _name = self.contract.functions.name().call()
         _decimals = self.contract.functions.decimals().call()
         _total_supply = self.contract.functions.totalSupply().call()
-        return {
-            "symbol": _symbol,
-            "name": _name,
-            "decimals": _decimals,
-            "totalSupply": str(_total_supply)
-        }
+        try:
+            d = int(_decimals)
+            return {
+                "symbol": _symbol,
+                "name": _name,
+                "decimals": d,
+                "totalSupply": str(_total_supply)
+            }
+        except ValueError:
+            return {}
 
     def balance_of(self, address):
         raise NotImplemented
