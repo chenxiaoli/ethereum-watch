@@ -5,7 +5,7 @@ from config import configs as myconfig
 rabbitmq_conn = None
 
 NEW_ETH_BLOCK_CHANNEL = myconfig.configs.queue.new_eth_block_arrived_topic
-NEW_ETH_TRADES_QUEUE = myconfig.configs.queue.new_eth_trades_queue
+NEW_ETH_TRADES_EXCHANGE = myconfig.configs.queue.new_ethereum_trade_exchange
 ETH_BLOCK_NUMBER_QUEUE = myconfig.configs.queue.eth_block_number_queue
 ETH_TRANSACTION_QUEUE = myconfig.configs.queue.eth_transaction_queue
 
@@ -59,8 +59,8 @@ def send_new_eth_trades_notification(trades_json):
     connection = get_rabbitmq_conn()
     channel = connection.channel()
 
-    channel.exchange_declare(exchange=NEW_ETH_BLOCK_CHANNEL,exchange_type='fanout')
-    channel.basic_publish(exchange="NEW_ETH_TRADES_QUEUE",
+    channel.exchange_declare(exchange=NEW_ETH_TRADES_EXCHANGE,exchange_type='fanout')
+    channel.basic_publish(exchange=NEW_ETH_TRADES_EXCHANGE,
                           routing_key="",
                           body=trades_json,
                           properties=pika.BasicProperties(
