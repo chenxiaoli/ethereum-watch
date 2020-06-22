@@ -221,7 +221,9 @@ def get_contract_info(address):
     token = Token(name=name, symbol=symbol, decimals=decimals, total_supply=total_supply)
     if token.name and symbol and str(decimals).isdigit():
         try:
-            token.save()
+            one = {}
+            one.update({"name": name,"symbol":symbol,"decimals":decimals,"total_supply":total_supply})
+            db.token.insert_one(one)
         except pymongo.errors.DuplicateKeyError:
             pass
         return token
