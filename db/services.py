@@ -220,7 +220,7 @@ def get_contract_info(address):
     token = Token(name=name, symbol=symbol, decimals=decimals, total_supply=total_supply)
     if token.name and symbol and decimals > -1:
         try:
-            db.token.insert_one(token)
+            token.save()
         except pymongo.errors.DuplicateKeyError:
             pass
         return token
