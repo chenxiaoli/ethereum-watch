@@ -8,10 +8,12 @@ class Erc20(object):
     name = None
     symbol = None
     decimals = None
+    address=None
 
     def __init__(self, address):
         abi = json.loads(ERC20_ABI_JSON_STRING)
         w3 = get_web3_instance()
+        self.address=address
         self.contract = w3.eth.contract(address=address, abi=abi)
 
     @property
@@ -29,6 +31,7 @@ class Erc20(object):
                 "totalSupply": str(_total_supply)
             }
         except ValueError:
+            print("error:contract %s decimals is %s" % (self.address,_decimals))
             return {}
 
     def balance_of(self, address):

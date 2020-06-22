@@ -213,6 +213,7 @@ def get_contract_info(address):
         return token
     erc20 = Erc20(address=address)
     contract_info = erc20.contract_info
+    print(contract_info)
     name = contract_info.get("name")
     symbol = contract_info.get("symbol")
     decimals = contract_info.get("decimals")
