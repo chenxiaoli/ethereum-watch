@@ -59,15 +59,16 @@ def send_new_eth_trades_notification(trades_json):
     connection = get_rabbitmq_conn()
     channel = connection.channel()
 
-    channel.queue_declare(queue=NEW_ETH_TRADES_QUEUE, durable=True)
-
-    channel.basic_publish(exchange="",
-                          routing_key=NEW_ETH_TRADES_QUEUE,
+    channel.exchange_declare(exchange=NEW_ETH_BLOCK_CHANNEL,exchange_type='fanout')
+    channel.basic_publish(exchange="NEW_ETH_TRADES_QUEUE",
+                          routing_key="",
                           body=trades_json,
                           properties=pika.BasicProperties(
                               delivery_mode=2,  # make message persistent
                           ))
     channel.close()
+
+
 
 
 def get_rabbitmq_conn():
