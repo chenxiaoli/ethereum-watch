@@ -8,6 +8,7 @@ from utils import block as block_utils
 
 import json
 from config import configs as myconfig
+from db import services
 
 w3 = get_web3_instance()
 
@@ -32,15 +33,26 @@ def transaction_process(transaction_hash):
         return
 
     transaction_status = transaction_receipt.get("status")
+    status = None
+    if transaction_status == 1:
+        status = "success"
+    elif transaction_status == 0:
+        status = "fail"
 
-    # db_services.insert_transaction(transaction, transaction_receipt)
     trades = block_utils.parse_transaction(transaction)
     contract_trades = block_utils.parse_transaction_receipt(transaction_receipt)
 
-    if transaction_status == 1:
-        rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trades))  # 发送交易通知到队列
-        for trade in contract_trades:
-            rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trade))  # 发送交易通知到队列
+    for trade in trades:
+        trade.update({"status":status})
+
+    rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trades))  # 发送交易通知到队列
+    for trade in contract_trades:
+        contract_address = trade.get("contract_address")
+        token = services.get_contract_info(contract_address)
+        trade.update({"name": token.name, "symbol": token.symbol, "decimals": token.decimals,
+                      "total_supply": token.total_supply})
+        trade.update({"status": status})
+        rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trade))  # 发送交易通知到队列
 
 
 def on_message(channel, method_frame, header_frame, body):
