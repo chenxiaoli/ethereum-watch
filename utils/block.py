@@ -2,6 +2,7 @@ from web3 import Web3
 from web3_config.web3_instance import get_web3_instance
 from contract.erc20 import Erc20
 
+
 def parse_transaction(transaction):
     w3 = get_web3_instance()
     trades = []
@@ -15,20 +16,7 @@ def parse_transaction(transaction):
             {"from": from_address, "to": to_address, "value": value, "symbol": "eth",
              "block_number": block_number,
              "transaction_hash": transaction_hash})
-    logs = transaction.get("logs", None)
-    if transaction.get(
-            "logs"):  # 智能合约(erc20) logs中，topics[0]都是事件的keccka的hash结果；topics[1]topics[2]分别是from和to；address是合约地址；data是交易额；
-        contract_address = logs.get("address", None)
-        topics = logs.get("topics", None)
-        data = logs.get("data", 0)
-        if contract_address and topics and data:
-            from_address = str(topics[1]).lower()
-            to_address = str(topics[2]).lower()
-            data = Web3.toInt(logs.data)  # 这里可能会出现异常,溢出
-            trades.append(
-                {"from": from_address, "to": to_address, "value": data,
-                 "contract_address": str(contract_address).lower(),
-                 "block_number": block_number, "transaction_hash": transaction_hash})
+
     return trades
 
 
@@ -55,10 +43,10 @@ def parse_transaction_receipt(transaction_receipt):
                 data = Web3.toInt(hexstr=log.data)  # 这里可能会出现异常,溢出
                 if data > 0:
                     trades.append(
-                        {"from": str(from_address).lower(),
-                         "to": str(to_address).lower(),
+                        {"from": from_address,
+                         "to": to_address,
                          "value": str(data),
-                         "contract_address": str(contract_address).lower(),
+                         "contract_address": contract_address,
                          "symbol": "",
                          "name": "",
                          "decimals": 0,
