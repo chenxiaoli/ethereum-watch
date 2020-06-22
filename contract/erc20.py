@@ -24,7 +24,7 @@ class Erc20(object):
             "symbol": _symbol,
             "name": _name,
             "decimals": _decimals,
-            "totalSupply": _total_supply
+            "totalSupply": str(_total_supply)
         }
 
     def balance_of(self, address):
