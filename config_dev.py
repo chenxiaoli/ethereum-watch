@@ -11,7 +11,7 @@ configs = {
         'host': '192.168.8.126',
         'virtual_host':"/ethereum-watch-dev",
         'user': 'ethereum-watch-dev',
-        'password': '1318',
+        'password': '13318',
         "port": 5672
     },
     'queue': {
