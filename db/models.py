@@ -60,7 +60,7 @@ class Token(DynamicDocument):
     contract_address = StringField("合约地址")
     creator_address = StringField("创建者地址")
     contract_account_balance = DecimalField("合约账户余额")
-    total_supply = DecimalField("总供应量")
+    total_supply = StringField("总供应量")
     decimals = IntField("小数点位数")
     eip = StringField(default="erc20")
     abi = ListField()
