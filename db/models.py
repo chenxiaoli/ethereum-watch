@@ -58,14 +58,14 @@ class Token(DynamicDocument):
     name = StringField("名称")
     symbol = StringField("代号")
     contract_address = StringField("合约地址")
-    creator_address = StringField("创建者地址")
-    contract_account_balance = DecimalField("合约账户余额")
+    # creator_address = StringField("创建者地址")
+    # contract_account_balance = DecimalField("合约账户余额")
     total_supply = StringField("总供应量")
     decimals = IntField("小数点位数")
-    eip = StringField(default="erc20")
-    abi = ListField()
-    address_count = IntField("持币地址数")
-    image_url = StringField()
+    # eip = StringField(default="erc20")
+    # abi = ListField()
+    # address_count = IntField("持币地址数")
+    # image_url = StringField()
 
 
 class TokenBalance(Document):
