@@ -18,7 +18,7 @@ def parse_transaction(transaction):
                 "from": from_address,
                 "to": to_address,
                 "amount": str(amount),
-                "amountUnit":"ether",
+                "amount_unit":"ether",
                 "block_number": block_number,
                 "transaction_hash": transaction_hash})
 

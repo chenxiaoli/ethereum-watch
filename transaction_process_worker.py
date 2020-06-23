@@ -59,7 +59,7 @@ def transaction_process(transaction_hash):
             amount = int(value) / (10 ** token.decimals)
             trade.update({
                 "amount": str(amount),
-                "amountUnit": token.symbol,
+                "amount_unit": token.symbol,
                 "symbol": token.symbol,
                 "name": token.name,
                 "chain_code": "ethereum"})
