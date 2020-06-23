@@ -56,7 +56,7 @@ def transaction_process(transaction_hash):
         token = services.get_contract_info(contract_address)
         if token:
             value = trade.pop("value")
-            amount = value / (10 ** token.decimals)
+            amount = int(value) / (10 ** token.decimals)
             trade.update({
                 "amount": str(amount),
                 "amountUnit": token.symbol,
