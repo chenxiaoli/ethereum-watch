@@ -43,16 +43,18 @@ def transaction_process(transaction_hash):
     contract_trades = block_utils.parse_transaction_receipt(transaction_receipt)
 
     for trade in trades:
-        trade.update({"status":status})
-    if len(trades)>0:
+        trade.update({"status": status,
+                      "chain_code":"ethereum",
+                     })
+    if len(trades) > 0:
         rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trades))  # 发送交易通知到队列
     for trade in contract_trades:
         contract_address = trade.get("contract_address")
         token = services.get_contract_info(contract_address)
         trade.update({"name": token.name, "symbol": token.symbol, "decimals": token.decimals,
-                      "total_supply": token.total_supply})
+                      "total_supply": token.total_supply,"chain_code":"ethereum"})
         trade.update({"status": status})
-    if len(contract_trades)>0:
+    if len(contract_trades) > 0:
         rabbitmq_instance.send_new_eth_trades_notification(json.dumps(contract_trades))  # 发送交易通知到队列
 
 
@@ -66,12 +68,12 @@ if __name__ == '__main__':
     password = myconfig.configs.rabbitmq_server.password
     host = myconfig.configs.rabbitmq_server.host
     port = myconfig.configs.rabbitmq_server.port
-    virtual_host=myconfig.configs.rabbitmq_server.virtual_host
+    virtual_host = myconfig.configs.rabbitmq_server.virtual_host
     eth_transaction_queue = myconfig.configs.queue.eth_transaction_queue
 
     credentials = pika.PlainCredentials(user, password)
     connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host=host, port=port, virtual_host=virtual_host,credentials=credentials)
+        host=host, port=port, virtual_host=virtual_host, credentials=credentials)
     )
     channel = connection.channel()
     channel.queue_declare(queue=eth_transaction_queue, durable=True)

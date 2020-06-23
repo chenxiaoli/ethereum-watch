@@ -12,7 +12,8 @@ def parse_transaction(transaction):
     transaction_hash = w3.toHex(transaction.get("hash"))
     if from_address and to_address and value:
         trades.append(
-            {"from": from_address, "to": to_address, "value": value, "symbol": "eth",
+            {"from": from_address, "to": to_address, "value": str(value),
+             "decimals":18,
              "block_number": block_number,
              "transaction_hash": transaction_hash})
 
@@ -46,9 +47,6 @@ def parse_transaction_receipt(transaction_receipt):
                          "to":  Web3.toChecksumAddress(to_address),
                          "value": str(data),
                          "contract_address":  Web3.toChecksumAddress(contract_address),
-                         "symbol": "",
-                         "name": "",
-                         "decimals": 0,
                          "block_number": block_number,
                          "transaction_hash": transaction_hash})
             except ValueError:
