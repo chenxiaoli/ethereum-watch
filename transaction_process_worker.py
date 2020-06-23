@@ -44,15 +44,16 @@ def transaction_process(transaction_hash):
 
     for trade in trades:
         trade.update({"status":status})
-
-    rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trades))  # 发送交易通知到队列
+    if len(trades)>0:
+        rabbitmq_instance.send_new_eth_trades_notification(json.dumps(trades))  # 发送交易通知到队列
     for trade in contract_trades:
         contract_address = trade.get("contract_address")
         token = services.get_contract_info(contract_address)
         trade.update({"name": token.name, "symbol": token.symbol, "decimals": token.decimals,
                       "total_supply": token.total_supply})
         trade.update({"status": status})
-    rabbitmq_instance.send_new_eth_trades_notification(json.dumps(contract_trades))  # 发送交易通知到队列
+    if len(contract_trades)>0:
+        rabbitmq_instance.send_new_eth_trades_notification(json.dumps(contract_trades))  # 发送交易通知到队列
 
 
 def on_message(channel, method_frame, header_frame, body):
