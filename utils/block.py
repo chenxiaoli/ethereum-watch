@@ -11,14 +11,14 @@ def parse_transaction(transaction):
     value = transaction["value"]  # 这里注意溢出
     block_number = transaction.get("blockNumber")
     transaction_hash = w3.toHex(transaction.get("hash"))
-    amount=Web3.fromWei(value,"ether")
+    amount = Web3.fromWei(value, "ether")
     if from_address and to_address and value:
         trades.append(
             {
                 "from": from_address,
                 "to": to_address,
                 "amount": str(amount),
-                "amount_unit":"ether",
+                "amount_unit": "ether",
                 "block_number": block_number,
                 "transaction_hash": transaction_hash})
 
