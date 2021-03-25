@@ -107,5 +107,3 @@ venv.bak/
 config_dev.py
 config_prod.py
 .idea/
-config/config_dev.py
-config/configs.py
