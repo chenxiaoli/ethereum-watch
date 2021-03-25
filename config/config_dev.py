@@ -3,7 +3,7 @@ configs = {
     'db': {
         'db_name': 'ethereum-watch-dev',
         'username': 'ethereum-watch-dev',
-        'password': '1025',
+        'password': 'xxx',
         'host': '192.168.8.126',
         'port': 27017,
     },
@@ -11,7 +11,7 @@ configs = {
         'host': '192.168.8.126',
         'virtual_host':"/ethereum-watch-dev",
         'user': 'ethereum-watch-dev',
-        'password': '1318',
+        'password': 'xxx',
         "port": 5672
     },
     'queue': {
@@ -23,7 +23,7 @@ configs = {
     },
     "web3_provider":{
         "type":"http",
-        "path":'http://eth-mainnet.tokenhub.cc:8515',
+        "path":'http://xxx:8515',
 
     },
     "start_block_number":1
